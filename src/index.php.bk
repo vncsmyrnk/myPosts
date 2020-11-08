@@ -1,0 +1,33 @@
+<?php
+#PHP Info:
+#phpinfo();
+
+/**
+ *
+ * LOGIN SYSTEM
+ *
+ * Parameters: 'user', 'password'
+ *
+**/
+
+# Database connection
+$host = 'db';
+$port = '5432';
+$dbname = 'annotations';
+$dbuser = 'postgres';
+$dbpassword = 'postgres-admin';
+
+# PDO
+$pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $dbuser, $dbpassword);
+
+# Define queries
+$getUser = "SELECT * FROM ANNOTATION";
+
+# Find user
+$rs = $pdo->query($getUser);
+$searchedUser = $rs->fetchAll(PDO::FETCH_ASSOC);
+echo '<ul>';
+foreach ($searchedUser as $ann) {
+	echo "<li>${ann['content']}</li>";
+}
+echo '</ul>';

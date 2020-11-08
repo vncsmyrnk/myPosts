@@ -1,0 +1,40 @@
+version: '3'
+services:
+        php:
+                build: ./dockerfile
+                volumes:
+                        - ./src/:/var/www/html
+                        - ./containers_volumes/apache2_conf/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf
+                        - ./containers_volumes/php_conf/php.ini-development:/usr/local/etc/php/php.ini-development
+                        - ./containers_volumes/apache2_conf/apache2.conf:/etc/apache2/apache2.conf
+                ports:
+                        - 80:80
+                deploy:
+                        resources:
+                                limits:
+                                        cpus: '0.50'
+                                        memory: 50M
+                networks:
+                        - docker-network
+
+        db:
+                image: postgres
+                volumes:
+                        - ./postgres_data:/var/lib/postgresql/data
+                        - ./containers_volumes/postgres:/project_files
+                ports:
+                        - 5432:5432
+                environment:
+                        POSTGRES_PASSWORD: postgres-admin
+                deploy:
+                        resources:
+                                limits:
+                                        cpus: '0.50'
+                                        memory: 50M
+                networks:
+                        - docker-network
+
+
+networks: 
+        docker-network:
+                driver: bridge
